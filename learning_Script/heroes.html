@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Our superheroes</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Faster+One" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <!--
+    2023-10-11
+    JSON 객체에 대해 필수로 알아야 할 항목 3개!!! 꼭 기억하세요.
+    1.key는 문자열로, value 는 어떤것이던 올수 있지만, 문자열인 경우엔 만드시 "" 로 감싸야함
+    2.parse() : JSON 문자열을 파람으로 받아서, 스크립트 객체로 변환하는 함수.
+    3.stringify() : 파라미터를 받아서 ,JSON 객체로 변환하는 함수.
+
+  -->
+  <body>
+
+      <header style=margin-top:150px;>
+        <!--동적으로 dom생성해서 값을 계속 넣어줄게요-->
+
+      </header>
+      <br><br><br>
+      <section>
+
+      </section>
+<br><br>
+      <script>
+        //제공되는 JSON의 URL을 기반으로, 서버에 json을 요청한다고 Request 해야 합니다.
+        //이떄 사용되는 대표적 API 가 fetch() 입니다.
+        //이 객체는 내부적으로 XHR 과 같은 역할을 하고, 요즘 가장 많이 쓰이는 비동기 서버 통신
+        //API 입니다.
+        //fetch 에는 요청할 URL 정보를 넘겨주면 되고, 내부적으로는 Promise 로 정의 되어있기 때문에,
+        //성공, 실패를 정의할수도 있습니다... 하지만 서버에 요청시 실패가 뜨는 경우엔
+        //사용될 데이터가 없기 때문에 대부분은 그냥 성공 위주로 코딩을 합니다.
+        //Request 객체 : 스크립트에서 특정 서버에 요청을 담당하는 객체, 나중에 fetch 에서
+        //이 객체의 정보를 연동, 실제 요청 및 결과를 리턴 받도록 합니다.
+
+        //Request, fetch 를 이용해서 json 요청을 하는 함수를 정의 합니다.
+        //이때 반드시 비동기 통신으로 해야하기 때문에 async 를 이용해서 요청할게요.
+        async function pending(){
+          const reqUrl = "   https://mdn.github.io/learning-area/javascript/oojs/json/superheroes.json";
+          //Request 객체를 이용, 요청 준비 작업.
+          const request = new Request(reqUrl);
+
+          //연결 준비가 되었으니. 요청 및 데이터를 받도록 합니다.
+          const response = await fetch(request); //fetch로 비동기 요청합니다.
+          const superheroes = await response.json();
+          
+          //두개로 분리 할게요.
+          //영웅들의 공통 정보는 Header 에 정의하고
+          //각 개별 정보는 카드형식으로 정의 할게요.
+          //따라서 showHeader(), showHero()를 정의후, 받아낸 json 을 파람으로 넘깁니다.
+          showHeader(superheroes);
+          showHero(superheroes);
+        }
+        //이미 비동기로 다땡겨왔기떄문에 어싱크는 이제 안씁니다.
+        const showHeader = (obj) => {
+          //1.header ele 를 찾아서 객체화 합니다.
+          const header = document.querySelector("header");
+          //h1 크기로 영웅의 타이틀을 넣을겁니다. 따라서 h1 ele 를 생성후 header 하위에 추가 합니다.
+          const myH1 = document.createElement("h1");
+          //구조분해할당
+          //const{squadName} = obj;
+          //일반방식
+          myH1.textContent = obj.squadName;
+          //추가 삭제는 부모요소에서 정의 해야합니다.
+          header.appendChild(myH1);
+
+          //p ele를 생성해서 myh1 하위에 배치 할게요.
+          const myP = document.createElement('p');
+          myP.textContent =  `HomeTown : ${obj.homeTown} // 조직일자 : ${obj.formed}`;
+          myP.style.marginTop = '100px';
+          header.appendChild(myP);
+        }
+
+        const showHero = (obj) =>{
+          //Section 영역에 각 영웅의 정보를 rendering 시킵니다.
+          const section = document.querySelector("section");
+          
+          //영웅들을 parsing 해서 가져옵니다.
+          const heroes = obj.members;
+
+          console.log(heroes);
+          
+          for(const hero of heroes){
+            //hero 는 배열내의 각 영웅 객체입니다.
+            //위 코드에서 자동으로 리턴해주니, 해당 정보를 추출해서 렌더링만하면 됨.
+            //section 에 article이라는 시멘틱 요소 생성
+            const myArticle = document.createElement("article");
+            //영웅들의 이름은  h2로
+            const myH2 = document.createElement("h2");
+            //일반정보는 p 태그로
+            const param1 = document.createElement("p");
+            const param2= document.createElement("p");
+            const param3= document.createElement("p");
+          
+            //영웅의 고유 능력치는 List 형태로(UL)
+            const myList = document.createElement("ul");
+
+            //일반정보 node 에 값 대입
+            myH2.textContent = hero.name;
+            param1.textContent = `코드네임 : ${hero.secreatIdentity}`;
+            param2.textContent = `Age : ${hero.age}`;
+            param3.textContent = `SuperPowers : `;
+
+            //superpower 는 배열에 담겨있으니 다시 꺼내옴
+            const SuperPowers = hero.powers;
+            for(const power of SuperPowers){
+              //각 능력은 ul 하위의 list 로 출력
+              const listItem = document.createElement('li');
+
+              listItem.textContent = power;
+
+              myList.appendChild(listItem);
+            }
+
+            //article node에 모두 추가.
+            myArticle.appendChild(myH2);
+            myArticle.appendChild(param1);
+            myArticle.appendChild(param2);
+            myArticle.appendChild(param3);
+            myArticle.appendChild(myList);
+
+            //Section에 article 추가
+            section.appendChild(myArticle);
+
+          }
+        }
+
+
+        pending();
+         
+
+      </script>
+  </body>
+</html>
