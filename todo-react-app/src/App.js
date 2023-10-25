@@ -4,8 +4,10 @@ import Todo from "./Todo";
 import { useEffect, useState } from "react";
 import { orange, pink } from "@mui/material/colors";
 import AddTodo from "./AddTodo";
-import { call, logout , signin } from "./components/ApiService";
+import { call, logout , signin ,signup } from "./components/ApiService";
 import NavigationBar from "./NavigationBar";
+import Signup from "./Signup";
+
 
 
 
@@ -33,8 +35,9 @@ const componentDidMount = () => {
     //배열을 초기화하고 상태관리를 해주겠다 원본과 수정본
     const[items,setItems] = useState([]);//지금 아무것도 할일이 없어서 빈배열을 준다.
     //일이 추가될때마다 items에 데이터가 담긴다 items는 원본이라 원본불변의 법칙을 지켜야한다.
-    const[loading,Setloading] = useState(true);
-    //const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const[loading,Setloading] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    
 
     // const handleLogin = () => {
     //   // 사용자 로그인 로직을 수행합니다.
@@ -129,6 +132,8 @@ const componentDidMount = () => {
         </List>
       </Paper>
     );
+  
+
     // let navigationBar =(
     //   <AppBar position="static">
     //     <Toolbar>
@@ -150,10 +155,7 @@ const componentDidMount = () => {
     //로딩중이 아닐때 렌더링할 부분
     let todoListPage = (
       <div>
-        <NavigationBar
-           
-         
-          />
+       
         <Container maxWidth="md">
           <AddTodo addItem={addItem}></AddTodo>
           <div className="TodoList">{todoItems}</div>
@@ -161,15 +163,18 @@ const componentDidMount = () => {
       </div>
     )
     let loadingPage=<h1>로딩중 입니다...</h1>
-    let content = loadingPage;
+    let content = loading ? loadingPage : todoListPage;
+
 
     if(!loading){
       content = todoListPage;
     }
     return(//리턴할때만 블락으로 묶어서 친다.
     <div className="App">
+      
         {content}
     </div>
+    
     );
       }
       

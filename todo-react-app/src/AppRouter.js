@@ -4,13 +4,16 @@
 import {Box, Typography} from '@mui/material'
 import React, {BrowserRouter,Routes,Route} from 'react-router-dom';
 import Login from './Login';
+import Signup from './Signup';
+
 import App from './App';
+import NavigationBar from './NavigationBar';
 
 export function Mysite(){
     return(
         <Typography variant='body2' color="InfoText" align='center'>
-            {"내가 만든 로긴 라우터"}
-            이제 거의 마지막이네요...{new Date().getFullYear()}{"."}
+            {"example project"}
+            공통 라우터{new Date().getFullYear()}{"."}
         </Typography>  
     );
 }
@@ -18,9 +21,12 @@ const AppRouter = () =>{
     return(
         <div>
             <BrowserRouter>
+                <NavigationBar />
                 <Routes>
                 <Route path='/' element={<App></App>}/>
                 <Route path='login' element={<Login/>}/>
+                <Route path='/Signup' element={<Signup />} /> 
+               
                 </Routes>
             </BrowserRouter>
 

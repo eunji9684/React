@@ -23,6 +23,7 @@ const Login = ()=>{
         console.log({username:username,password:password});
         //signin()을 이용 비동기 통신을 전송하는데, 값으로 json으로 생성해서 보내야함.
         signin({username:username,password:password});
+       
     }
     
 
